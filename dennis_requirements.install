@@ -23,6 +23,12 @@ function dennis_requirements_requirements($phase) {
       $site_make = file_get_contents(conf_path() . '/site.make');
     }
 
+    // Get contents of Gruntfile.js.
+    $gruntfile = '';
+    if (file_exists((conf_path() . '/Gruntfile.js'))) {
+      $gruntfile = file_get_contents(conf_path() . '/Gruntfile.js');
+    }
+
     // Distro 1.30.x
     if ($modules_enabled['dennis_core']->schema_version >= 7162) {
 
@@ -51,6 +57,15 @@ function dennis_requirements_requirements($phase) {
         $requirements['dfp'] = array(
           'title' => $t('DFP'),
           'value' => $t('This module is on distro and should be removed from site.make.'),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+
+      // Case 23055: Cache busting on requirejs bundles.
+      if (stripos($gruntfile, "grunt.loadNpmTasks('grunt-hashres')") === FALSE) {
+        $requirements['hashres'] = array(
+          'title' => $t('Gruntfile.js'),
+          'value' => $t('To benefit from automatic cache busting on requirejs bundles, any Gruntfile optimising RequireJS files need to have a hashres task.'),
           'severity' => REQUIREMENT_ERROR,
         );
       }
