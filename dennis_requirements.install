@@ -14,6 +14,9 @@ function dennis_requirements_requirements($phase) {
   $t = get_t();
 
   if ($phase == 'runtime') {
+    // Get the Distro schema version.
+    $distro_schema_version = $modules_enabled['dennis_core']->schema_version;
+
     // Get a list of modules.
     $modules_enabled = system_list('module_enabled');
 
@@ -29,8 +32,8 @@ function dennis_requirements_requirements($phase) {
       $gruntfile = file_get_contents(conf_path() . '/Gruntfile.js');
     }
 
-    // Distro 1.30.x
-    if ($modules_enabled['dennis_core']->schema_version >= 7162) {
+    // Distro 1.31.x
+    if ($distro_schema_version >= 7162) {
 
       // Case 22799: Addthis is replaced by Sharerich.
       if (isset($modules_enabled['addthis'])) {
@@ -70,6 +73,74 @@ function dennis_requirements_requirements($phase) {
         );
       }
 
+      // Distro 1.30.x
+      if ($distro_schema_version >= 7161) {
+
+        // #22527 Feeds.
+          // Check display settings?
+
+        // #22780 Advanced Gallery.
+           // Check if BDD test exists?
+
+        // #22907 Advanced Gallery.
+          // Check if function exists?
+
+        // #22633 DFP.
+          // Check if context reaction exists?
+
+      }
+
+      // Distro 1.29.x
+      if ($distro_schema_version >= 7160) {
+
+        // Require.js
+
+        // CSS and JS aggregation.
+
+        // #22614 Client/Mosaic.
+
+      }
+
+      // Distro 1.28.x
+      if ($distro_schema_version >= 7156) {
+
+        // Remove any backported {SITE}_client_views_query_alter() hooks.
+
+        // Videos now play with YouTube's player as rendered file.
+
+        // Ensure NewsML module is removed from site repositories.
+
+        // Chosen module: Dependency for jquery_update has been removed.
+
+        // Superfish module should not be enabled.
+
+      }
+
+      // Distro 1.27.x
+      if ($distro_schema_version >= 7152) {
+
+        // Services will need to be re-exported with version 3.5.
+
+        // #20912 Images will need to be migrated using 'drush migration_filepath'.
+
+        // Added new Formatter for the RSS thumbnails.
+
+        // Metatag_twitter_cards needs a site's twitter account & account id.
+
+        // Google_plusone module (now provided by distro) should be removed from site.make.
+
+        // #20229 If a site has its own page.tpl.php implementation add schema.org organizational markup.
+
+      }
+
+      // Distro 1.26.x
+      if ($distro_schema_version >= 7151) {
+
+        // Enable dennis_disqus if site uses disqus.
+
+        // Smart paging seo replaces the Page Break button.
+
+      }
 
     }
   }
