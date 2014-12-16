@@ -1,0 +1,33 @@
+<?php
+/**
+ * @file
+ * dennis_requirements.install
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function dennis_requirements_requirements($phase) {
+  // Requirements based on CHANGELOG.txt.
+  $requirements = array();
+  // Ensure translations don't break during installation.
+  $t = get_t();
+
+  if ($phase == 'runtime') {
+    // Get a list of modules.
+    $modules_enabled = system_list('module_enabled');
+
+    // Case 22799: Addthis is replaced by Sharerich.
+    if ((isset($modules_enabled['addthis']) && $modules_enabled['dennis_core']->schema_version >= 7162)) {
+      // if (module_exists('addthis')) {
+      $requirements['dennis_social'] = array(
+        'title' => $t('Dennis Social'),
+        'value' => $t('Addthis module needs to be disabled. Sharerich should be used instead.'),
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+
+  }
+
+  return $requirements;
+}

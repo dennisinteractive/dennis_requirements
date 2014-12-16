@@ -1,0 +1,5 @@
+name = Dennis Requirements
+description = Logical check-list against upgrade notes to ensure upgrade requirements are met.
+package = Other
+core = 7.x
+
