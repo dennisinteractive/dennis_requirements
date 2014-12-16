@@ -46,6 +46,16 @@ function dennis_requirements_requirements($phase) {
         );
       }
 
+      // Case 23050: DFP was updated on Distro and should be removed form site.make.
+      if (stripos($site_make, '[dfp]') !== FALSE) {
+        $requirements['dfp'] = array(
+          'title' => $t('DFP'),
+          'value' => $t('This module is on distro and should be removed from site.make.'),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+
+
     }
   }
 
