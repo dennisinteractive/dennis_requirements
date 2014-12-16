@@ -17,16 +17,36 @@ function dennis_requirements_requirements($phase) {
     // Get a list of modules.
     $modules_enabled = system_list('module_enabled');
 
-    // Case 22799: Addthis is replaced by Sharerich.
-    if ((isset($modules_enabled['addthis']) && $modules_enabled['dennis_core']->schema_version >= 7162)) {
-      // if (module_exists('addthis')) {
-      $requirements['dennis_social'] = array(
-        'title' => $t('Dennis Social'),
-        'value' => $t('Addthis module needs to be disabled. Sharerich should be used instead.'),
-        'severity' => REQUIREMENT_ERROR,
-      );
+    // Get contents of site.make.
+    $site_make = '';
+    if (file_exists((conf_path() . '/site.make'))) {
+      $site_make = file_get_contents(conf_path() . '/site.make');
     }
 
+    // Distro 1.30.x
+    if ($modules_enabled['dennis_core']->schema_version >= 7162) {
+
+      // Case 22799: Addthis is replaced by Sharerich.
+      if (isset($modules_enabled['addthis'])) {
+        $requirements['dennis_social'] = array(
+          'title' => $t('Dennis Social'),
+          'value' => $t('Addthis module needs to be disabled. Sharerich should be used instead.'),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+
+      // Case 22925: Google Adwords Remarketing is added to Distro and should be removed form site.make.
+      if (stripos($site_make, '[google_adwords_remarketing]') !== FALSE ||
+        stripos($site_make, '[google_remarketing_tag]') !== FALSE
+      ) {
+        $requirements['google_adwords_remarketing'] = array(
+          'title' => $t('Google Remarketing Tag'),
+          'value' => $t('This module is on distro and should be removed from site.make.'),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+
+    }
   }
 
   return $requirements;
