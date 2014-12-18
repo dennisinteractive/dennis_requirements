@@ -39,7 +39,8 @@ function dennis_requirements_requirements($phase) {
       if (isset($modules_enabled['addthis'])) {
         $requirements['dennis_social'] = array(
           'title' => $t('Dennis Social'),
-          'value' => $t('Addthis module needs to be disabled. Sharerich should be used instead.'),
+          'value' => _dennis_requirements_case_link(22799) .
+            $t('Addthis module needs to be disabled. Sharerich should be used instead.'),
           'severity' => REQUIREMENT_ERROR,
         );
       }
@@ -50,7 +51,8 @@ function dennis_requirements_requirements($phase) {
       ) {
         $requirements['google_adwords_remarketing'] = array(
           'title' => $t('Google Remarketing Tag'),
-          'value' => $t('This module is on distro and should be removed from site.make.'),
+          'value' => _dennis_requirements_case_link(22925) .
+            $t('This module is on distro and should be removed from site.make.'),
           'severity' => REQUIREMENT_ERROR,
         );
       }
@@ -59,7 +61,8 @@ function dennis_requirements_requirements($phase) {
       if (stripos($site_make, '[dfp]') !== FALSE) {
         $requirements['dfp'] = array(
           'title' => $t('DFP'),
-          'value' => $t('This module is on distro and should be removed from site.make.'),
+          'value' => _dennis_requirements_case_link(23050) .
+            $t('This module is on distro and should be removed from site.make.'),
           'severity' => REQUIREMENT_ERROR,
         );
       }
@@ -68,7 +71,8 @@ function dennis_requirements_requirements($phase) {
       if (stripos($gruntfile, "grunt.loadNpmTasks('grunt-hashres')") === FALSE) {
         $requirements['hashres'] = array(
           'title' => $t('Gruntfile.js'),
-          'value' => $t('To benefit from automatic cache busting on requirejs bundles, any Gruntfile optimising RequireJS files need to have a hashres task.'),
+          'value' => _dennis_requirements_case_link(23055) .
+            $t('To benefit from automatic cache busting on requirejs bundles, any Gruntfile optimising RequireJS files need to have a hashres task.'),
           'severity' => REQUIREMENT_ERROR,
         );
       }
@@ -87,7 +91,8 @@ function dennis_requirements_requirements($phase) {
       if (isset($modules_enabled['dennis_gallery'])) {
         $requirements['dennis_gallery'] = array(
           'title' => $t('Dennis Gallery'),
-          'value' => $t('Advanced Gallery is available. Use dennis_gallery_adv_migrate_from_gallery() to migrate and then disable Dennis Gallery on a separate release.'),
+          'value' => _dennis_requirements_case_link(22907) .
+            $t('Advanced Gallery is available. Use dennis_gallery_adv_migrate_from_gallery() to migrate and then disable Dennis Gallery on a separate release.'),
           'severity' => REQUIREMENT_WARNING,
         );
       }
@@ -99,7 +104,8 @@ function dennis_requirements_requirements($phase) {
           if (isset($context->reactions['block']['blocks']['dfp-out_of_page'])) {
             $requirements['dfp'] = array(
               'title' => $t('DFP'),
-              'value' => $t('DFP Out of page no longer renders as a block. Please edit the DFP Contexts and add a Reaction for DFP Out of Page.'),
+              'value' => _dennis_requirements_case_link(22633) .
+                $t('DFP Out of page no longer renders as a block. Please edit the DFP Contexts and add a Reaction for DFP Out of Page.'),
               'severity' => REQUIREMENT_ERROR,
             );
           }
@@ -169,4 +175,12 @@ function dennis_requirements_requirements($phase) {
   }
 
   return $requirements;
+}
+
+/**
+ * Helper to link to the cases.
+ */
+function _dennis_requirements_case_link($issue) {
+  $t = get_t();
+  return l($t('Case') . ' ' . $issue, 'https://didev.fogbugz.com/default.asp?' . $issue) . ' ';
 }
