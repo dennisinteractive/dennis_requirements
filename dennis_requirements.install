@@ -318,6 +318,13 @@ function dennis_requirements_requirements($phase) {
     if ($distro_schema_version >= 7151) {
 
       // Enable dennis_disqus if site uses disqus.
+      if (isset($modules_enabled['disqus']) && !isset($modules_enabled['dennis_disqus'])) {
+        $requirements['disqus_enabled'] = array(
+          'title' => $t('Dennis Disqus'),
+          'value' => $t('This module needs to be enabled.'),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
 
       // Smart paging seo replaces the Page Break button.
 
