@@ -82,10 +82,10 @@ function dennis_requirements_requirements($phase) {
     if ($distro_schema_version >= 7161) {
 
       // #22527 Feeds.
-      // Check display settings?
+      // @todo Check display settings?
 
       // #22780 Advanced Gallery.
-      // Check if BDD test exists?
+      // @todo Check if BDD test exists?
 
       // #22907 Advanced Gallery.
       if (isset($modules_enabled['dennis_gallery'])) {
@@ -218,15 +218,33 @@ function dennis_requirements_requirements($phase) {
       }
 
       // #22614 Client/Mosaic.
-
+      // @todo
     }
 
     // Distro 1.28.x
     if ($distro_schema_version >= 7156) {
 
       // Remove any backported {SITE}_client_views_query_alter() hooks.
+      // @todo
 
       // Videos now play with YouTube's player as rendered file.
+      $entity_info = entity_get_info();
+
+      foreach ($entity_info['node']['bundles'] as $bundle_name => $info) {
+        $field_instances = field_info_instances('node', $bundle_name);
+        if (isset($field_instances['field_associated_video'])) {
+          if (isset($field_instances['field_associated_video']['display']['default']['type']) &&
+            $field_instances['field_associated_video']['display']['default']['type'] == 'file_rendered'
+          ) {}
+          else {
+            $requirements[$bundle_name . '_youtube'] = array(
+              'title' => $t('YouTube Player on %bundle content type', array('%bundle' => $bundle_name)),
+              'value' => $t('Videos should use YouTube\'s player whenever possible using rendered file display.'),
+              'severity' => REQUIREMENT_WARNING,
+            );
+          }
+        }
+      }
 
       // Ensure NewsML module is removed from site repositories.
 
