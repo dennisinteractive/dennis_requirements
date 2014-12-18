@@ -270,14 +270,25 @@ function dennis_requirements_requirements($phase) {
     if ($distro_schema_version >= 7152) {
 
       // Services will need to be re-exported with version 3.5.
+      // @todo
 
       // #20912 Images will need to be migrated using 'drush migration_filepath'.
+      // @todo
 
       // Added new Formatter for the RSS thumbnails.
+      // @todo
 
       // Metatag_twitter_cards needs a site's twitter account & account id.
+      // @todo
 
       // Google_plusone module (now provided by distro) should be removed from site.make.
+      if (stripos($site_make, '[google_plusone]') !== FALSE) {
+        $requirements['google_plusone_make'] = array(
+          'title' => $t('Google Plus One'),
+          'value' => $t('This module is on distro and should be removed from site.make.'),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
 
       // #20229 If a site has its own page.tpl.php implementation add schema.org organizational markup.
 
