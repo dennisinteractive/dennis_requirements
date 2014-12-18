@@ -35,6 +35,9 @@ function dennis_requirements_requirements($phase) {
     // Get the path to the theme.
     $theme_path = drupal_get_path('theme', variable_get('theme_default'));
 
+    // Load wysiwyg settings.
+    $wysiwyg_settings = wysiwyg_profile_load_all();
+
     // Distro 1.31.x
     if ($distro_schema_version >= 7162) {
 
@@ -326,8 +329,22 @@ function dennis_requirements_requirements($phase) {
         );
       }
 
-      // Smart paging seo replaces the Page Break button.
-
+      // #19931 Smart paging seo replaces the Page Break button.
+      foreach ($wysiwyg_settings as $name => $item) {
+        if (isset($item->settings['buttons']['drupal']['smart_paging_seo']) &&
+          $item->settings['buttons']['drupal']['smart_paging_seo'] == TRUE
+        ) {}
+        elseif (isset($item->settings['buttons']['drupal']['smart_paging']) &&
+          $item->settings['buttons']['drupal']['smart_paging'] == TRUE
+        ) {
+          $requirements[$name . '_wysiwyg_sp'] = array(
+            'title' => $t('Smart paging SEO on %name profile', array('%name' => $name)),
+            'value' => _dennis_requirements_case_link('19931') .
+              $t('You need to enable Smart paging SEO button in the Wysiwyg profile.'),
+            'severity' => REQUIREMENT_WARNING,
+          );
+        }
+      }
     }
 
     // Distro 1.23.x to 1.25.x
