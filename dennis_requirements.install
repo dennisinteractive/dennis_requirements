@@ -255,9 +255,14 @@ function dennis_requirements_requirements($phase) {
         );
       }
 
-      // Chosen module: Dependency for jquery_update has been removed.
-
       // Superfish module should not be enabled.
+      if (isset($modules_enabled['superfish'])) {
+        $requirements['superfish_enabled'] = array(
+          'title' => $t('Superfish'),
+          'value' => $t('This module should be disabled.'),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
 
     }
 
