@@ -14,11 +14,11 @@ function dennis_requirements_requirements($phase) {
   $t = get_t();
 
   if ($phase == 'runtime') {
-    // Get the Distro schema version.
-    $distro_schema_version = $modules_enabled['dennis_core']->schema_version;
-
     // Get a list of modules.
     $modules_enabled = system_list('module_enabled');
+
+    // Get the Distro schema version.
+    $distro_schema_version = $modules_enabled['dennis_core']->schema_version;
 
     // Get contents of site.make.
     $site_make = '';
@@ -72,77 +72,100 @@ function dennis_requirements_requirements($phase) {
           'severity' => REQUIREMENT_ERROR,
         );
       }
+    }
 
-      // Distro 1.30.x
-      if ($distro_schema_version >= 7161) {
+    // Distro 1.30.x
+    if ($distro_schema_version >= 7161) {
 
-        // #22527 Feeds.
-          // Check display settings?
+      // #22527 Feeds.
+      // Check display settings?
 
-        // #22780 Advanced Gallery.
-           // Check if BDD test exists?
+      // #22780 Advanced Gallery.
+      // Check if BDD test exists?
 
-        // #22907 Advanced Gallery.
-          // Check if function exists?
-
-        // #22633 DFP.
-          // Check if context reaction exists?
-
+      // #22907 Advanced Gallery.
+      if (isset($modules_enabled['dennis_gallery'])) {
+        $requirements['dennis_gallery'] = array(
+          'title' => $t('Dennis Gallery'),
+          'value' => $t('Advanced Gallery is available. Use dennis_gallery_adv_migrate_from_gallery() to migrate and then disable Dennis Gallery on a separate release.'),
+          'severity' => REQUIREMENT_WARNING,
+        );
       }
 
-      // Distro 1.29.x
-      if ($distro_schema_version >= 7160) {
-
-        // Require.js
-
-        // CSS and JS aggregation.
-
-        // #22614 Client/Mosaic.
-
+      // #22633 DFP Out of page is no longer a block, it is now a context reaction.
+      $context_reactions = context_reactions();
+      if (isset($context_reactions['dfp_outofpage'])) {
+        foreach (context_enabled_contexts() as $context) {
+          if (isset($context->reactions['block']['blocks']['dfp-out_of_page'])) {
+            $requirements['dfp'] = array(
+              'title' => $t('DFP'),
+              'value' => $t('DFP Out of page no longer renders as a block. Please edit the DFP Contexts and add a Reaction for DFP Out of Page.'),
+              'severity' => REQUIREMENT_ERROR,
+            );
+          }
+        }
       }
+    }
 
-      // Distro 1.28.x
-      if ($distro_schema_version >= 7156) {
+    // Distro 1.29.x
+    if ($distro_schema_version >= 7160) {
 
-        // Remove any backported {SITE}_client_views_query_alter() hooks.
+      // Require.js
 
-        // Videos now play with YouTube's player as rendered file.
+      // CSS and JS aggregation.
 
-        // Ensure NewsML module is removed from site repositories.
-
-        // Chosen module: Dependency for jquery_update has been removed.
-
-        // Superfish module should not be enabled.
-
-      }
-
-      // Distro 1.27.x
-      if ($distro_schema_version >= 7152) {
-
-        // Services will need to be re-exported with version 3.5.
-
-        // #20912 Images will need to be migrated using 'drush migration_filepath'.
-
-        // Added new Formatter for the RSS thumbnails.
-
-        // Metatag_twitter_cards needs a site's twitter account & account id.
-
-        // Google_plusone module (now provided by distro) should be removed from site.make.
-
-        // #20229 If a site has its own page.tpl.php implementation add schema.org organizational markup.
-
-      }
-
-      // Distro 1.26.x
-      if ($distro_schema_version >= 7151) {
-
-        // Enable dennis_disqus if site uses disqus.
-
-        // Smart paging seo replaces the Page Break button.
-
-      }
+      // #22614 Client/Mosaic.
 
     }
+
+    // Distro 1.28.x
+    if ($distro_schema_version >= 7156) {
+
+      // Remove any backported {SITE}_client_views_query_alter() hooks.
+
+      // Videos now play with YouTube's player as rendered file.
+
+      // Ensure NewsML module is removed from site repositories.
+
+      // Chosen module: Dependency for jquery_update has been removed.
+
+      // Superfish module should not be enabled.
+
+    }
+
+    // Distro 1.27.x
+    if ($distro_schema_version >= 7152) {
+
+      // Services will need to be re-exported with version 3.5.
+
+      // #20912 Images will need to be migrated using 'drush migration_filepath'.
+
+      // Added new Formatter for the RSS thumbnails.
+
+      // Metatag_twitter_cards needs a site's twitter account & account id.
+
+      // Google_plusone module (now provided by distro) should be removed from site.make.
+
+      // #20229 If a site has its own page.tpl.php implementation add schema.org organizational markup.
+
+    }
+
+    // Distro 1.26.x
+    if ($distro_schema_version >= 7151) {
+
+      // Enable dennis_disqus if site uses disqus.
+
+      // Smart paging seo replaces the Page Break button.
+
+    }
+
+    // Distro 1.23.x to 1.25.x
+    if ($distro_schema_version >= 7146) {
+
+
+    }
+
+
   }
 
   return $requirements;
