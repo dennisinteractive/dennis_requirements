@@ -104,7 +104,7 @@ function dennis_requirements_requirements($phase) {
           if (isset($context->reactions['block']['blocks']['dfp-out_of_page'])) {
             $requirements['dfp'] = array(
               'title' => $t('DFP'),
-              'value' => _dennis_requirements_case_link(22633) .
+              'value' => _dennis_requirements_case_link('W4808') .
                 $t('DFP Out of page no longer renders as a block. Please edit the DFP Contexts and add a Reaction for DFP Out of Page.'),
               'severity' => REQUIREMENT_ERROR,
             );
@@ -115,10 +115,107 @@ function dennis_requirements_requirements($phase) {
 
     // Distro 1.29.x
     if ($distro_schema_version >= 7160) {
-
       // Require.js
+      if (!file_exists((conf_path() . '/Gruntfile.js')) || !variable_get('dennis_js_use', FALSE)) {
+        $requirements['require_js_amd'] = array(
+          'title' => $t('Require.js'),
+          'value' => _dennis_requirements_case_link('W4777') .
+            $t('Sites should consider converting all custom JavaScript code using the AMD module format and Require.js.'),
+          'severity' => REQUIREMENT_WARNING,
+        );
+      }
 
       // CSS and JS aggregation.
+      if (!isset($modules_enabled['advagg'])) {
+        $requirements['advagg_disabled'] = array(
+          'title' => $t('Advagg'),
+          'value' => _dennis_requirements_case_link('21634') .
+            $t('This module should be enabled to increase performance.'),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+
+      if (!isset($modules_enabled['advagg'])) {
+        $requirements['advagg_disabled'] = array(
+          'title' => $t('Advagg'),
+          'value' => _dennis_requirements_case_link('21634') .
+            $t('This module should be enabled to increase performance.'),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+
+      if (!isset($modules_enabled['advagg_bundler'])) {
+        $requirements['advagg_bundler_disabled'] = array(
+          'title' => $t('Advagg_bundler'),
+          'value' => _dennis_requirements_case_link('21634') .
+            $t('This module should be enabled to increase performance.'),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+
+      if (!isset($modules_enabled['advagg_css_compress'])) {
+        $requirements['advagg_css_compress_disabled'] = array(
+          'title' => $t('Advagg_css_compress'),
+          'value' => _dennis_requirements_case_link('21634') .
+            $t('This module should be enabled to increase performance.'),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+
+      if (!isset($modules_enabled['advagg_js_compress'])) {
+        $requirements['advagg_js_compress_disabled'] = array(
+          'title' => $t('Advagg_js_compress'),
+          'value' => _dennis_requirements_case_link('21634') .
+            $t('This module should be enabled to increase performance.'),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+
+      if (!isset($modules_enabled['advagg_mod'])) {
+        $requirements['advagg_mod_disabled'] = array(
+          'title' => $t('Advagg_mod'),
+          'value' => _dennis_requirements_case_link('21634') .
+            $t('This module should be enabled to increase performance.'),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+
+      if (isset($modules_enabled['agrcache'])) {
+        $requirements['agrcache_enabled'] = array(
+          'title' => $t('Agrcache'),
+          'value' => _dennis_requirements_case_link('21634') .
+            $t('This module should be Disabled.'),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+
+      if (!variable_get('preprocess_js', FALSE) ||
+        !variable_get('preprocess_css', FALSE) ||
+        !variable_get('advagg_enabled', FALSE) ||
+        variable_get('advagg_css_compressor', FALSE) != 2
+      ) {
+        $requirements['aggregation_2'] = array(
+          'title' => $t('CSS and JS aggregation'),
+          'value' => _dennis_requirements_case_link('21634#BugEvent.156511') .
+            $t('Sites should have CSS and JS aggregation turned on to increase performance.'),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+
+      if (!variable_get('advagg_mod_css_adjust_sort_browsers', FALSE) ||
+        !variable_get('advagg_mod_css_adjust_sort_external', FALSE) ||
+        !variable_get('advagg_mod_css_adjust_sort_inline', FALSE) ||
+        !variable_get('advagg_mod_js_adjust_sort_browsers', FALSE) ||
+        !variable_get('advagg_mod_js_adjust_sort_external', FALSE) ||
+        !variable_get('advagg_mod_js_adjust_sort_inline', FALSE)
+      ) {
+        $requirements['aggregation_3'] = array(
+          'title' => $t('CSS and JS aggregation'),
+          'value' => _dennis_requirements_case_link('21634#BugEvent.156511') .
+            $t('Sites should have their CSS/JS stack sorted properly to make aggregation more efficient.'),
+          'severity' => REQUIREMENT_WARNING,
+        );
+      }
 
       // #22614 Client/Mosaic.
 
@@ -182,5 +279,5 @@ function dennis_requirements_requirements($phase) {
  */
 function _dennis_requirements_case_link($issue) {
   $t = get_t();
-  return l($t('Case') . ' ' . $issue, 'https://didev.fogbugz.com/default.asp?' . $issue) . ' ';
+  return l($t('#') . $issue, 'https://didev.fogbugz.com/default.asp?' . $issue) . ' ';
 }
