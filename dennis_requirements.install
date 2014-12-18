@@ -247,6 +247,13 @@ function dennis_requirements_requirements($phase) {
       }
 
       // Ensure NewsML module is removed from site repositories.
+      if (isset($modules_enabled['newsml'])) {
+        $requirements['newsml_enabled'] = array(
+          'title' => $t('Newsml'),
+          'value' => $t('This module should be disabled.'),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
 
       // Chosen module: Dependency for jquery_update has been removed.
 
