@@ -33,7 +33,7 @@ function dennis_requirements_requirements($phase) {
     }
 
     // Get the path to the theme.
-    $theme_path = drupal_get_path('theme', variable_get('theme_default'));
+    $theme_path = drupal_get_path('theme', variable_get('theme_default', 'bartik'));
 
     // Load wysiwyg settings.
     $wysiwyg_settings = wysiwyg_profile_load_all();
@@ -316,20 +316,18 @@ function dennis_requirements_requirements($phase) {
       }
 
       // #20229 If a site has its own page.tpl.php implementation add schema.org organizational markup.
-      if (!empty($theme_path)) {
-        $file = file_scan_directory($theme_path, '/^page(--.+)?\.tpl\.php$/');
-        if (!empty($file)) {
-          $file = reset($file);
-          if (file_exists($file->uri)) {
-            if ($file_contents = file_get_contents($file->uri)) {
-              if (stripos($file_contents, '<img property="logo"') == FALSE) {
-                $requirements['organizational_markup'] = array(
-                  'title' => $t('Organizational markup'),
-                  'value' => _dennis_requirements_case_link('20229') .
-                    $t('This site has its own page.tpl.php but the implementation of organizational markup is missing.'),
-                  'severity' => REQUIREMENT_WARNING,
-                );
-              }
+      $file = file_scan_directory($theme_path, '/^page(--.+)?\.tpl\.php$/');
+      if (!empty($file)) {
+        $file = reset($file);
+        if (file_exists($file->uri)) {
+          if ($file_contents = file_get_contents($file->uri)) {
+            if (stripos($file_contents, '<img property="logo"') == FALSE) {
+              $requirements['organizational_markup'] = array(
+                'title' => $t('Organizational markup'),
+                'value' => _dennis_requirements_case_link('20229') .
+                  $t('This site has its own page.tpl.php but the implementation of organizational markup is missing.'),
+                'severity' => REQUIREMENT_WARNING,
+              );
             }
           }
         }
