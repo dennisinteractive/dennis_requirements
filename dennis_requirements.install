@@ -27,9 +27,9 @@ function dennis_requirements_requirements($phase) {
     }
 
     // Get contents of Gruntfile.js.
-    $gruntfile = '';
+    $site_gruntfile = '';
     if (file_exists((conf_path() . '/Gruntfile.js'))) {
-      $gruntfile = file_get_contents(conf_path() . '/Gruntfile.js');
+      $site_gruntfile = file_get_contents(conf_path() . '/Gruntfile.js');
     }
 
     // Get the path to the theme.
@@ -58,23 +58,23 @@ function dennis_requirements_requirements($phase) {
         $requirements['google_adwords_remarketing'] = array(
           'title' => $t('Google Remarketing Tag'),
           'value' => _dennis_requirements_case_link(22925) .
-            $t('This module is on distro and should be removed from site.make.'),
+            $t('This module is part of distro and should be removed from site.make.'),
           'severity' => REQUIREMENT_ERROR,
         );
       }
 
-      // Case 23050: DFP was updated on Distro and should be removed form site.make.
+      // Case 23050: DFP was updated on Distro and should be removed from site.make.
       if (stripos($site_make, '[dfp]') !== FALSE) {
         $requirements['dfp'] = array(
           'title' => $t('DFP'),
           'value' => _dennis_requirements_case_link(23050) .
-            $t('This module is on distro and should be removed from site.make.'),
+            $t('This module is part of distro and should be removed from site.make.'),
           'severity' => REQUIREMENT_ERROR,
         );
       }
 
       // Case 23055: Cache busting on requirejs bundles.
-      if (stripos($gruntfile, "grunt.loadNpmTasks('grunt-hashres')") === FALSE) {
+      if ($site_gruntfile && stripos($site_gruntfile, "grunt.loadNpmTasks('grunt-hashres')") === FALSE) {
         $requirements['hashres'] = array(
           'title' => $t('Gruntfile.js'),
           'value' => _dennis_requirements_case_link(23055) .
@@ -122,7 +122,7 @@ function dennis_requirements_requirements($phase) {
     // Distro 1.29.x
     if ($distro_schema_version >= 7160) {
       // Require.js
-      if (!file_exists((conf_path() . '/Gruntfile.js')) || !variable_get('dennis_js_use', FALSE)) {
+      if (!$site_gruntfile || !variable_get('dennis_js_use', FALSE)) {
         $requirements['require_js_amd'] = array(
           'title' => $t('Require.js'),
           'value' => _dennis_requirements_case_link('W4777') .
@@ -152,7 +152,7 @@ function dennis_requirements_requirements($phase) {
 
       if (!isset($modules_enabled['advagg_bundler'])) {
         $requirements['advagg_bundler_disabled'] = array(
-          'title' => $t('Advagg_bundler'),
+          'title' => $t('AdvAgg Bundler'),
           'value' => _dennis_requirements_case_link('21634') .
             $t('This module should be enabled to increase performance.'),
           'severity' => REQUIREMENT_ERROR,
@@ -161,7 +161,7 @@ function dennis_requirements_requirements($phase) {
 
       if (!isset($modules_enabled['advagg_css_compress'])) {
         $requirements['advagg_css_compress_disabled'] = array(
-          'title' => $t('Advagg_css_compress'),
+          'title' => $t('AdvAgg Compress CSS'),
           'value' => _dennis_requirements_case_link('21634') .
             $t('This module should be enabled to increase performance.'),
           'severity' => REQUIREMENT_ERROR,
@@ -170,7 +170,7 @@ function dennis_requirements_requirements($phase) {
 
       if (!isset($modules_enabled['advagg_js_compress'])) {
         $requirements['advagg_js_compress_disabled'] = array(
-          'title' => $t('Advagg_js_compress'),
+          'title' => $t('AdvAgg Compress Javascript'),
           'value' => _dennis_requirements_case_link('21634') .
             $t('This module should be enabled to increase performance.'),
           'severity' => REQUIREMENT_ERROR,
@@ -179,7 +179,7 @@ function dennis_requirements_requirements($phase) {
 
       if (!isset($modules_enabled['advagg_mod'])) {
         $requirements['advagg_mod_disabled'] = array(
-          'title' => $t('Advagg_mod'),
+          'title' => $t('AdvAgg Modifier'),
           'value' => _dennis_requirements_case_link('21634') .
             $t('This module should be enabled to increase performance.'),
           'severity' => REQUIREMENT_ERROR,
@@ -188,7 +188,7 @@ function dennis_requirements_requirements($phase) {
 
       if (isset($modules_enabled['agrcache'])) {
         $requirements['agrcache_enabled'] = array(
-          'title' => $t('Agrcache'),
+          'title' => $t('Aggregate cache'),
           'value' => _dennis_requirements_case_link('21634') .
             $t('This module should be Disabled.'),
           'severity' => REQUIREMENT_ERROR,
