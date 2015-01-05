@@ -310,14 +310,14 @@ function dennis_requirements_requirements($phase) {
       if (stripos($site_make, '[google_plusone]') !== FALSE) {
         $requirements['google_plusone_make'] = array(
           'title' => $t('Google Plus One'),
-          'value' => $t('This module is on distro and should be removed from site.make.'),
+          'value' => $t('This module is part of distro and should be removed from site.make.'),
           'severity' => REQUIREMENT_ERROR,
         );
       }
 
       // #20229 If a site has its own page.tpl.php implementation add schema.org organizational markup.
       if (!empty($theme_path)) {
-        $file = file_scan_directory($theme_path, '/page.tpl.php/');
+        $file = file_scan_directory($theme_path, '/^page(--.+)?\.tpl\.php$/');
         if (!empty($file)) {
           $file = reset($file);
           if (file_exists($file->uri)) {
@@ -326,7 +326,7 @@ function dennis_requirements_requirements($phase) {
                 $requirements['organizational_markup'] = array(
                   'title' => $t('Organizational markup'),
                   'value' => _dennis_requirements_case_link('20229') .
-                    $t('This site has it\'s own page.tpl.php but the implementation of organizational markup is missing.'),
+                    $t('This site has its own page.tpl.php but the implementation of organizational markup is missing.'),
                   'severity' => REQUIREMENT_WARNING,
                 );
               }
