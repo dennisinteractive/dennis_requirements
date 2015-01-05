@@ -238,16 +238,35 @@ function dennis_requirements_requirements($phase) {
 
       foreach ($entity_info['node']['bundles'] as $bundle_name => $info) {
         $field_instances = field_info_instances('node', $bundle_name);
-        if (isset($field_instances['field_associated_video'])) {
-          if (isset($field_instances['field_associated_video']['display']['default']['type']) &&
-            $field_instances['field_associated_video']['display']['default']['type'] == 'file_rendered'
-          ) {}
-          else {
-            $requirements[$bundle_name . '_youtube'] = array(
-              'title' => $t('YouTube Player on %bundle content type', array('%bundle' => $bundle_name)),
-              'value' => $t('Videos should use YouTube\'s player whenever possible using rendered file display.'),
+        if (isset($field_instances['field_associated_video']) && isset($field_instances['field_associated_video']['display']['default']['type'])) {
+          $node_field_format = $field_instances['field_associated_video']['display']['default'];
+
+          // Check if the node field formatter is set to rendered file or hidden.
+          if (!in_array($node_field_format['type'], array('hidden', 'file_rendered'))) {
+            $requirements[$bundle_name . '_associated_videos'] = array(
+              'title' => $t('Associated videos on %bundle content type', array('%bundle' => $bundle_name)),
+              'value' => $t('Videos should use Rendered file format whenever possible.'),
               'severity' => REQUIREMENT_WARNING,
             );
+          }
+          // Check if the file display is using YouTube as the default display.
+          if ($node_field_format['type'] == 'file_rendered' && $file_view_mode = $node_field_format['settings']['file_view_mode']) {
+            $displays = file_displays('video', $file_view_mode);
+            // Clean up unused file displays.
+            foreach ($displays as $key => $display) {
+              if (!$display['status']) {
+                unset($displays[$key]);
+              }
+            }
+            _file_sort_array_by_weight($displays);
+            reset($displays);
+            if (key($displays) != 'media_youtube_video') {
+              $requirements[$bundle_name . '_associated_videos_youtube'] = array(
+                'title' => $t('Associated videos on %bundle content type', array('%bundle' => $bundle_name)),
+                'value' => $t('The configured file display should use YouTube as default.'),
+                'severity' => REQUIREMENT_WARNING,
+              );
+            }
           }
         }
       }
