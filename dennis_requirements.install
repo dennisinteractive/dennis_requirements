@@ -87,11 +87,7 @@ function dennis_requirements_requirements($phase) {
     // Distro 1.30.x
     if ($distro_schema_version >= 7161) {
 
-      // #22527 Feeds.
-      // @todo Check display settings?
-
-      // #22780 Advanced Gallery.
-      // @todo Check if BDD test exists?
+      // #22527 Feeds - Covered by BDD @distro @seo @api @22527
 
       // #22907 Advanced Gallery.
       if (isset($modules_enabled['dennis_gallery'])) {
@@ -238,7 +234,7 @@ function dennis_requirements_requirements($phase) {
     if ($distro_schema_version >= 7156) {
 
       // Remove any backported {SITE}_client_views_query_alter() hooks.
-      // @todo
+      // @todo this should be a manual task - we would need to check that the hook is making the same alteration.
 
       // Videos now play with YouTube's player as rendered file.
       $entity_info = entity_get_info();
@@ -302,7 +298,7 @@ function dennis_requirements_requirements($phase) {
     if ($distro_schema_version >= 7152) {
 
       // Services will need to be re-exported with version 3.5.
-      // @todo
+      // @todo will be re-exported as part of a distro upgrade.
 
       // #20912 Images will need to be migrated using 'drush migration_filepath'.
       // @todo
