@@ -186,13 +186,20 @@ function dennis_requirements_requirements($phase) {
         );
       }
 
-      if (!variable_get('preprocess_js', FALSE) ||
-        !variable_get('preprocess_css', FALSE)
-      ) {
-        $requirements['aggregation_2'] = array(
-          'title' => $t('CSS and JS aggregation'),
+      if (!variable_get('preprocess_css', FALSE)) {
+        $requirements['preprocess_css'] = array(
+          'title' => $t('CSS preprocessing'),
           'value' => _dennis_requirements_case_link('21634#BugEvent.156511') .
-            $t('JS and CSS preprocessing has been disabled.'),
+            $t('CSS preprocessing has been disabled.'),
+          'severity' => REQUIREMENT_WARNING,
+        );
+      }
+
+      if (!variable_get('preprocess_js', FALSE)) {
+        $requirements['preprocess_js'] = array(
+          'title' => $t('JS preprocessing'),
+          'value' => _dennis_requirements_case_link('21634#BugEvent.156511') .
+            $t('JS preprocessing has been disabled.'),
           'severity' => REQUIREMENT_WARNING,
         );
       }
