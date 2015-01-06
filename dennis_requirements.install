@@ -306,14 +306,15 @@ function dennis_requirements_requirements($phase) {
       // Added new Formatter for the RSS thumbnails.
       // @todo
 
-      // Metatag_twitter_cards needs a site's twitter account & account id.
+      // #19829 Metatag_twitter_cards needs a site's twitter account & account id.
       $metatag_config = metatag_config_load('global');
       $required_metatags = array('twitter:site', 'twitter:site:id');
       foreach ($required_metatags as $name) {
-        if (!isset($metatag_config->config['twitter:site'])) {
+        if (empty($metatag_config->config[$name]['value'])) {
           $requirements[$name] = array(
             'title' => $t(':name metatag', array(':name' => $name)),
-            'value' => $t(':name metatag should be set.', array(':name' => $name)),
+            'value' => _dennis_requirements_case_link('19829') .
+              $t(':name metatag should be set.', array(':name' => $name)),
             'severity' => REQUIREMENT_WARNING,
           );
         }
