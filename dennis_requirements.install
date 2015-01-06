@@ -392,7 +392,7 @@ function dennis_requirements_requirements($phase) {
 
   // Append [ERROR] to requirement error descriptions.
   foreach ($requirements as &$requirement) {
-    if ($requirement['severity'] == 2) {
+    if ($requirement['severity'] == REQUIREMENT_ERROR) {
       $requirement['value'] .= ' [ERROR]';
     }
   }
