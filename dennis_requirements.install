@@ -307,7 +307,6 @@ function dennis_requirements_requirements($phase) {
       // @todo
 
       // Metatag_twitter_cards needs a site's twitter account & account id.
-      // @todo
       $metatag_config = metatag_config_load('global');
       $required_metatags = array('twitter:site', 'twitter:site:id');
       foreach ($required_metatags as $name) {
