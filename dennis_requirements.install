@@ -33,7 +33,7 @@ function dennis_requirements_requirements($phase) {
     }
 
     // Get the path to the theme.
-    $theme_path = drupal_get_path('theme', variable_get('theme_default', 'bartik'));
+    $theme_path = drupal_get_path('theme', variable_get('theme_default'));
 
     // Load wysiwyg settings.
     $wysiwyg_settings = wysiwyg_profile_load_all();
@@ -315,19 +315,29 @@ function dennis_requirements_requirements($phase) {
         );
       }
 
-      // #20229 If a site has its own page.tpl.php implementation add schema.org organizational markup.
-      $file = file_scan_directory($theme_path, '/^page(--.+)?\.tpl\.php$/');
-      if (!empty($file)) {
-        $file = reset($file);
-        if (file_exists($file->uri)) {
-          if ($file_contents = file_get_contents($file->uri)) {
-            if (stripos($file_contents, '<img property="logo"') == FALSE) {
-              $requirements['organizational_markup'] = array(
-                'title' => $t('Organizational markup'),
-                'value' => _dennis_requirements_case_link('20229') .
-                  $t('This site has its own page.tpl.php but the implementation of organizational markup is missing.'),
-                'severity' => REQUIREMENT_WARNING,
-              );
+      // Check that a default them has been set.
+      if (empty($theme_path)) {
+        $requirements['default_theme'] = array(
+          'title' => $t('Default theme'),
+          'value' => $t('The default theme "@theme" cannot be found', array('@theme' => variable_get('theme_default'))),
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+      else {
+        // #20229 If a site has its own page.tpl.php implementation add schema.org organizational markup.
+        $file = file_scan_directory($theme_path, '/^page(--.+)?\.tpl\.php$/');
+        if (!empty($file)) {
+          $file = reset($file);
+          if (file_exists($file->uri)) {
+            if ($file_contents = file_get_contents($file->uri)) {
+              if (stripos($file_contents, '<img property="logo"') == FALSE) {
+                $requirements['organizational_markup'] = array(
+                  'title' => $t('Organizational markup'),
+                  'value' => _dennis_requirements_case_link('20229') .
+                    $t('This site has its own page.tpl.php but the implementation of organizational markup is missing.'),
+                  'severity' => REQUIREMENT_WARNING,
+                );
+              }
             }
           }
         }
