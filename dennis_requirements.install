@@ -141,15 +141,6 @@ function dennis_requirements_requirements($phase) {
         );
       }
 
-      if (!isset($modules_enabled['advagg'])) {
-        $requirements['advagg_disabled'] = array(
-          'title' => $t('Advagg'),
-          'value' => _dennis_requirements_case_link('21634') .
-            $t('This module should be enabled to increase performance.'),
-          'severity' => REQUIREMENT_ERROR,
-        );
-      }
-
       if (!isset($modules_enabled['advagg_bundler'])) {
         $requirements['advagg_bundler_disabled'] = array(
           'title' => $t('AdvAgg Bundler'),
@@ -196,8 +187,17 @@ function dennis_requirements_requirements($phase) {
       }
 
       if (!variable_get('preprocess_js', FALSE) ||
-        !variable_get('preprocess_css', FALSE) ||
-        !variable_get('advagg_enabled', FALSE) ||
+        !variable_get('preprocess_css', FALSE)
+      ) {
+        $requirements['aggregation_2'] = array(
+          'title' => $t('CSS and JS aggregation'),
+          'value' => _dennis_requirements_case_link('21634#BugEvent.156511') .
+            $t('JS and CSS preprocessing has been disabled.'),
+          'severity' => REQUIREMENT_WARNING,
+        );
+      }
+
+      if (!variable_get('advagg_enabled', FALSE) ||
         variable_get('advagg_css_compressor', FALSE) != 2
       ) {
         $requirements['aggregation_2'] = array(
