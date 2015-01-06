@@ -308,6 +308,17 @@ function dennis_requirements_requirements($phase) {
 
       // Metatag_twitter_cards needs a site's twitter account & account id.
       // @todo
+      $metatag_config = metatag_config_load('global');
+      $required_metatags = array('twitter:site', 'twitter:site:id');
+      foreach ($required_metatags as $name) {
+        if (!isset($metatag_config->config['twitter:site'])) {
+          $requirements[$name] = array(
+            'title' => $t(':name metatag', array(':name' => $name)),
+            'value' => $t(':name metatag should be set.', array(':name' => $name)),
+            'severity' => REQUIREMENT_WARNING,
+          );
+        }
+      }
 
       // Google_plusone module (now provided by distro) should be removed from site.make.
       if (stripos($site_make, '[google_plusone]') !== FALSE) {
@@ -386,10 +397,30 @@ function dennis_requirements_requirements($phase) {
 
   }
 
-  // Append [ERROR] to requirement error descriptions.
-  foreach ($requirements as &$requirement) {
-    if ($requirement['severity'] == REQUIREMENT_ERROR) {
-      $requirement['value'] .= ' [ERROR]';
+  // Group and sort requirements.
+  if (count($requirements) > 0) {
+    // Add heading for requirements.
+    $requirements['dennis_requirements'] = array(
+      'title' => $t('Dennis Requirements'),
+      'value' => $t(''),
+      'severity' => REQUIREMENT_INFO,
+      'weight' => 999,
+    );
+
+    $i = 1000;
+    // Show errors first.
+    foreach ($requirements as &$requirement) {
+      if ($requirement['severity'] == REQUIREMENT_ERROR) {
+        // Append [ERROR] to requirement error descriptions.
+        $requirement['value'] .= ' [ERROR]';
+        $requirement['weight'] = $i++;
+      }
+    }
+    // Set warning weights.
+    foreach ($requirements as &$requirement) {
+      if ($requirement['severity'] == REQUIREMENT_WARNING) {
+        $requirement['weight'] = $i++;
+      }
     }
   }
 
