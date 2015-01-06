@@ -51,7 +51,7 @@ function dennis_requirements_requirements($phase) {
         );
       }
 
-      // Case 22925: Google Adwords Remarketing is added to Distro and should be removed form site.make.
+      // Case 22925: Google Adwords Remarketing is added to Distro and should be removed from site.make.
       if (stripos($site_make, '[google_adwords_remarketing]') !== FALSE ||
         stripos($site_make, '[google_remarketing_tag]') !== FALSE
       ) {
@@ -381,6 +381,13 @@ function dennis_requirements_requirements($phase) {
     }
 
 
+  }
+
+  // Append [ERROR] to requirement error descriptions.
+  foreach ($requirements as &$requirement) {
+    if ($requirement['severity'] == 2) {
+      $requirement['value'] .= ' [ERROR]';
+    }
   }
 
   return $requirements;
