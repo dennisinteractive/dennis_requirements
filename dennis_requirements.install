@@ -226,7 +226,7 @@ function dennis_requirements_requirements($phase) {
           'title' => $t('CSS and JS aggregation'),
           'value' => _dennis_requirements_case_link('21634#BugEvent.156511') .
             $t('Sites should have their CSS/JS stack sorted properly to make aggregation more efficient.'),
-          'severity' => REQUIREMENT_WARNING,
+          'severity' => REQUIREMENT_ERROR,
         );
       }
 
@@ -322,7 +322,7 @@ function dennis_requirements_requirements($phase) {
         );
       }
 
-      // Check that a default them has been set.
+      // Check that a default theme has been set.
       if (empty($theme_path)) {
         $requirements['default_theme'] = array(
           'title' => $t('Default theme'),
