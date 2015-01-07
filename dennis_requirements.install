@@ -303,8 +303,21 @@ function dennis_requirements_requirements($phase) {
       // #20912 Images will need to be migrated using 'drush migration_filepath'.
       // @todo
 
-      // Added new Formatter for the RSS thumbnails.
-      // @todo
+      // #21009 Added new Formatter for the RSS thumbnails.
+      foreach (module_implements('field_formatter_info') as $module_name) {
+        $hook = $module_name . '_field_formatter_info';
+        if (function_exists($hook)) {
+          $formatters = call_user_func($hook);
+          if (isset($formatters['dennis_core_rss_thumbnail']) && $module_name !== 'dennis_core') {
+            $requirements['dennis_core_rss_thumbnail_' . $module_name] = array(
+              'title' => $t('<em>dennis_core_rss_thumbnail</em> field formatter'),
+              'value' => _dennis_requirements_case_link('21009') .
+                $t('<em>dennis_core_rss_thumbnail</em> field formatter should be removed from :hook.', array(':hook' => $hook . '()')),
+              'severity' => REQUIREMENT_WARNING,
+            );
+          }
+        }
+      }
 
       // #19829 Metatag_twitter_cards needs a site's twitter account & account id.
       $metatag_config = metatag_config_load('global');
