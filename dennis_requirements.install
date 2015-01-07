@@ -227,7 +227,32 @@ function dennis_requirements_requirements($phase) {
       }
 
       // #22614 Client/Mosaic.
-      // - This should be a manual task as the old implementations are not consistent.
+      // Populate all blocks for the current theme.
+      $block_names = array();
+      module_load_include('inc', 'block', 'block.admin');
+      drupal_theme_initialize();
+      if (!isset($theme)) {
+        // If theme is not specifically set, rehash for the current theme.
+        global $theme_key;
+        $theme = $theme_key;
+      }
+
+      // Find any block with string 'mosaic' in the info and check if it comes from Dennis Client.
+      foreach (block_admin_display_prepare_blocks($theme) as $block) {
+        if (strpos($block['info'], 'mosaic') !== FALSE) {
+          if ($block['module'] !== 'dennis_client') {
+            $block_names[] = $block['info'];
+          }
+        }
+      }
+      if (!empty($block_names)) {
+        $requirements['dennis_client_mosaic'] = array(
+          'title' => $t('Dennis Client Mosaic'),
+          'value' => _dennis_requirements_case_link('22614') .
+            $t('These blocks should be replaced by Dennis Client Mosaic blocks: ' . implode(', ', $block_names)),
+          'severity' => REQUIREMENT_WARNING,
+        );
+      }
     }
 
     // Distro 1.28.x
