@@ -62,7 +62,7 @@ function dennis_requirements_requirements($phase) {
     // Add heading for requirements.
     $requirements['dennis_requirements'] = array(
       'title' => $t('Dennis Requirements'),
-      'value' => $t(''),
+      'description' => $t(''),
       'severity' => REQUIREMENT_INFO,
       'weight' => 999,
     );
@@ -71,7 +71,7 @@ function dennis_requirements_requirements($phase) {
     // Show errors first.
     foreach ($requirements as &$requirement) {
       if ($requirement['severity'] == REQUIREMENT_ERROR) {
-        // Append [ERROR] to requirement error descriptions.
+        // Append [ERROR] to requirement error value.
         $requirement['value'] .= ' [ERROR]';
         $requirement['weight'] = $i++;
       }
@@ -79,6 +79,8 @@ function dennis_requirements_requirements($phase) {
     // Set warning weights.
     foreach ($requirements as &$requirement) {
       if ($requirement['severity'] == REQUIREMENT_WARNING) {
+        // Append [ERROR] to requirement error value.
+        $requirement['value'] .= ' [WARNING]';
         $requirement['weight'] = $i++;
       }
     }
@@ -108,7 +110,7 @@ function _dennis_requirements_schema_7151($t, $modules_enabled, &$requirements) 
   if (isset($modules_enabled['disqus']) && !isset($modules_enabled['dennis_disqus'])) {
     $requirements['disqus_enabled'] = array(
       'title' => $t('Dennis Disqus'),
-      'value' => $t('This module needs to be enabled.'),
+      'description' => $t('This module needs to be enabled.'),
       'severity' => REQUIREMENT_ERROR,
     );
   }
@@ -126,7 +128,7 @@ function _dennis_requirements_schema_7151($t, $modules_enabled, &$requirements) 
     ) {
       $requirements[$name . '_wysiwyg_sp'] = array(
         'title' => $t('Smart paging SEO on %name profile', array('%name' => $name)),
-        'value' => _dennis_requirements_case_link('19931') .
+        'description' => _dennis_requirements_case_link('19931') .
           $t('You need to enable Smart paging SEO button in the Wysiwyg profile.'),
         'severity' => REQUIREMENT_WARNING,
       );
@@ -158,7 +160,7 @@ function _dennis_requirements_schema_7152($t, $modules_enabled, &$requirements) 
       if (isset($formatters['dennis_core_rss_thumbnail']) && $module_name !== 'dennis_core') {
         $requirements['dennis_core_rss_thumbnail_' . $module_name] = array(
           'title' => $t('<em>dennis_core_rss_thumbnail</em> field formatter'),
-          'value' => _dennis_requirements_case_link('21009') .
+          'description' => _dennis_requirements_case_link('21009') .
             $t('<em>dennis_core_rss_thumbnail</em> field formatter should be removed from :hook.', array(':hook' => $hook . '()')),
           'severity' => REQUIREMENT_WARNING,
         );
@@ -173,7 +175,7 @@ function _dennis_requirements_schema_7152($t, $modules_enabled, &$requirements) 
     if (empty($metatag_config->config[$name]['value'])) {
       $requirements[$name] = array(
         'title' => $t(':name metatag', array(':name' => $name)),
-        'value' => _dennis_requirements_case_link('19829') .
+        'description' => _dennis_requirements_case_link('19829') .
           $t(':name metatag should be set.', array(':name' => $name)),
         'severity' => REQUIREMENT_WARNING,
       );
@@ -184,7 +186,7 @@ function _dennis_requirements_schema_7152($t, $modules_enabled, &$requirements) 
   if (stripos($site_make, '[google_plusone]') !== FALSE) {
     $requirements['google_plusone_make'] = array(
       'title' => $t('Google Plus One'),
-      'value' => $t('This module is part of distro and should be removed from site.make.'),
+      'description' => $t('This module is part of distro and should be removed from site.make.'),
       'severity' => REQUIREMENT_ERROR,
     );
   }
@@ -196,7 +198,7 @@ function _dennis_requirements_schema_7152($t, $modules_enabled, &$requirements) 
   if (empty($theme_path)) {
     $requirements['default_theme'] = array(
       'title' => $t('Default theme'),
-      'value' => $t('The default theme "@theme" cannot be found', array('@theme' => variable_get('theme_default'))),
+      'description' => $t('The default theme "@theme" cannot be found', array('@theme' => variable_get('theme_default'))),
       'severity' => REQUIREMENT_ERROR,
     );
   }
@@ -210,7 +212,7 @@ function _dennis_requirements_schema_7152($t, $modules_enabled, &$requirements) 
           if (stripos($file_contents, '<img property="logo"') == FALSE) {
             $requirements['organizational_markup'] = array(
               'title' => $t('Organizational markup'),
-              'value' => _dennis_requirements_case_link('20229') .
+              'description' => _dennis_requirements_case_link('20229') .
                 $t('This site has its own page.tpl.php but the implementation of organizational markup is missing.'),
               'severity' => REQUIREMENT_WARNING,
             );
@@ -240,7 +242,7 @@ function _dennis_requirements_schema_7156($t, $modules_enabled, &$requirements) 
       if (!in_array($node_field_format['type'], array('hidden', 'file_rendered'))) {
         $requirements[$bundle_name . '_associated_videos'] = array(
           'title' => $t('Associated videos on %bundle content type', array('%bundle' => $bundle_name)),
-          'value' => $t('Videos should use Rendered file format whenever possible.'),
+          'description' => $t('Videos should use Rendered file format whenever possible.'),
           'severity' => REQUIREMENT_WARNING,
         );
       }
@@ -258,7 +260,7 @@ function _dennis_requirements_schema_7156($t, $modules_enabled, &$requirements) 
         if (key($displays) != 'media_youtube_video') {
           $requirements[$bundle_name . '_associated_videos_youtube'] = array(
             'title' => $t('Associated videos on %bundle content type', array('%bundle' => $bundle_name)),
-            'value' => $t('The configured file display should use YouTube as default.'),
+            'description' => $t('The configured file display should use YouTube as default.'),
             'severity' => REQUIREMENT_WARNING,
           );
         }
@@ -270,7 +272,7 @@ function _dennis_requirements_schema_7156($t, $modules_enabled, &$requirements) 
   if (isset($modules_enabled['newsml'])) {
     $requirements['newsml_enabled'] = array(
       'title' => $t('Newsml'),
-      'value' => $t('This module should be disabled.'),
+      'description' => $t('This module should be disabled.'),
       'severity' => REQUIREMENT_ERROR,
     );
   }
@@ -279,7 +281,7 @@ function _dennis_requirements_schema_7156($t, $modules_enabled, &$requirements) 
   if (isset($modules_enabled['superfish'])) {
     $requirements['superfish_enabled'] = array(
       'title' => $t('Superfish'),
-      'value' => $t('This module should be disabled.'),
+      'description' => $t('This module should be disabled.'),
       'severity' => REQUIREMENT_ERROR,
     );
   }
@@ -299,7 +301,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
   if (!$site_gruntfile || !variable_get('dennis_js_use', FALSE)) {
     $requirements['require_js_amd'] = array(
       'title' => $t('Require.js'),
-      'value' => _dennis_requirements_case_link('W4777') .
+      'description' => _dennis_requirements_case_link('W4777') .
         $t('Sites should consider converting all custom JavaScript code using the AMD module format and Require.js.'),
       'severity' => REQUIREMENT_WARNING,
     );
@@ -309,7 +311,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
   if (!isset($modules_enabled['advagg'])) {
     $requirements['advagg_disabled'] = array(
       'title' => $t('Advagg'),
-      'value' => _dennis_requirements_case_link('21634') .
+      'description' => _dennis_requirements_case_link('21634') .
         $t('This module should be enabled to increase performance.'),
       'severity' => REQUIREMENT_ERROR,
     );
@@ -318,7 +320,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
   if (!isset($modules_enabled['advagg_bundler'])) {
     $requirements['advagg_bundler_disabled'] = array(
       'title' => $t('AdvAgg Bundler'),
-      'value' => _dennis_requirements_case_link('21634') .
+      'description' => _dennis_requirements_case_link('21634') .
         $t('This module should be enabled to increase performance.'),
       'severity' => REQUIREMENT_ERROR,
     );
@@ -327,7 +329,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
   if (!isset($modules_enabled['advagg_css_compress'])) {
     $requirements['advagg_css_compress_disabled'] = array(
       'title' => $t('AdvAgg Compress CSS'),
-      'value' => _dennis_requirements_case_link('21634') .
+      'description' => _dennis_requirements_case_link('21634') .
         $t('This module should be enabled to increase performance.'),
       'severity' => REQUIREMENT_ERROR,
     );
@@ -336,7 +338,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
   if (!isset($modules_enabled['advagg_js_compress'])) {
     $requirements['advagg_js_compress_disabled'] = array(
       'title' => $t('AdvAgg Compress Javascript'),
-      'value' => _dennis_requirements_case_link('21634') .
+      'description' => _dennis_requirements_case_link('21634') .
         $t('This module should be enabled to increase performance.'),
       'severity' => REQUIREMENT_ERROR,
     );
@@ -345,7 +347,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
   if (!isset($modules_enabled['advagg_mod'])) {
     $requirements['advagg_mod_disabled'] = array(
       'title' => $t('AdvAgg Modifier'),
-      'value' => _dennis_requirements_case_link('21634') .
+      'description' => _dennis_requirements_case_link('21634') .
         $t('This module should be enabled to increase performance.'),
       'severity' => REQUIREMENT_ERROR,
     );
@@ -354,7 +356,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
   if (isset($modules_enabled['agrcache'])) {
     $requirements['agrcache_enabled'] = array(
       'title' => $t('Aggregate cache'),
-      'value' => _dennis_requirements_case_link('21634') .
+      'description' => _dennis_requirements_case_link('21634') .
         $t('This module should be Disabled.'),
       'severity' => REQUIREMENT_ERROR,
     );
@@ -363,7 +365,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
   if (!variable_get('preprocess_css', FALSE)) {
     $requirements['preprocess_css'] = array(
       'title' => $t('CSS preprocessing'),
-      'value' => _dennis_requirements_case_link('21634#BugEvent.156511') .
+      'description' => _dennis_requirements_case_link('21634#BugEvent.156511') .
         $t('CSS preprocessing has been disabled.'),
       'severity' => REQUIREMENT_WARNING,
     );
@@ -372,7 +374,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
   if (!variable_get('preprocess_js', FALSE)) {
     $requirements['preprocess_js'] = array(
       'title' => $t('JS preprocessing'),
-      'value' => _dennis_requirements_case_link('21634#BugEvent.156511') .
+      'description' => _dennis_requirements_case_link('21634#BugEvent.156511') .
         $t('JS preprocessing has been disabled.'),
       'severity' => REQUIREMENT_WARNING,
     );
@@ -383,7 +385,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
   ) {
     $requirements['aggregation_2'] = array(
       'title' => $t('CSS and JS aggregation'),
-      'value' => _dennis_requirements_case_link('21634#BugEvent.156511') .
+      'description' => _dennis_requirements_case_link('21634#BugEvent.156511') .
         $t('Sites should have CSS and JS aggregation turned on to increase performance.'),
       'severity' => REQUIREMENT_ERROR,
     );
@@ -398,7 +400,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
   ) {
     $requirements['aggregation_3'] = array(
       'title' => $t('CSS and JS aggregation'),
-      'value' => _dennis_requirements_case_link('21634#BugEvent.156511') .
+      'description' => _dennis_requirements_case_link('21634#BugEvent.156511') .
         $t('Sites should have their CSS/JS stack sorted properly to make aggregation more efficient.'),
       'severity' => REQUIREMENT_ERROR,
     );
@@ -426,7 +428,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
   if (!empty($block_names)) {
     $requirements['dennis_client_mosaic'] = array(
       'title' => $t('Dennis Client Mosaic'),
-      'value' => _dennis_requirements_case_link('22614') .
+      'description' => _dennis_requirements_case_link('22614') .
         $t('These blocks should be replaced by Dennis Client Mosaic blocks: ' . implode(', ', $block_names)),
       'severity' => REQUIREMENT_WARNING,
     );
@@ -443,7 +445,7 @@ function _dennis_requirements_schema_7161($t, $modules_enabled, &$requirements) 
   if (isset($modules_enabled['dennis_gallery'])) {
     $requirements['dennis_gallery'] = array(
       'title' => $t('Dennis Gallery'),
-      'value' => _dennis_requirements_case_link(22907) .
+      'description' => _dennis_requirements_case_link(22907) .
         $t('Advanced Gallery is available. Use dennis_gallery_adv_migrate_from_gallery() to migrate and then disable Dennis Gallery on a separate release.'),
       'severity' => REQUIREMENT_WARNING,
     );
@@ -456,7 +458,7 @@ function _dennis_requirements_schema_7161($t, $modules_enabled, &$requirements) 
       if (isset($context->reactions['block']['blocks']['dfp-out_of_page'])) {
         $requirements['dfp'] = array(
           'title' => $t('DFP'),
-          'value' => _dennis_requirements_case_link('W4808') .
+          'description' => _dennis_requirements_case_link('W4808') .
             $t('DFP Out of page no longer renders as a block. Please edit the DFP Contexts and add a Reaction for DFP Out of Page.'),
           'severity' => REQUIREMENT_ERROR,
         );
@@ -479,7 +481,7 @@ function _dennis_requirements_schema_7162($t, $modules_enabled, &$requirements) 
   if (isset($modules_enabled['addthis'])) {
     $requirements['dennis_social'] = array(
       'title' => $t('Dennis Social'),
-      'value' => _dennis_requirements_case_link(22799) .
+      'description' => _dennis_requirements_case_link(22799) .
         $t('Addthis module needs to be disabled. Sharerich should be used instead.'),
       'severity' => REQUIREMENT_ERROR,
     );
@@ -491,7 +493,7 @@ function _dennis_requirements_schema_7162($t, $modules_enabled, &$requirements) 
   ) {
     $requirements['google_adwords_remarketing'] = array(
       'title' => $t('Google Remarketing Tag'),
-      'value' => _dennis_requirements_case_link(22925) .
+      'description' => _dennis_requirements_case_link(22925) .
         $t('This module is part of distro and should be removed from site.make.'),
       'severity' => REQUIREMENT_ERROR,
     );
@@ -501,7 +503,7 @@ function _dennis_requirements_schema_7162($t, $modules_enabled, &$requirements) 
   if (stripos($site_make, '[dfp]') !== FALSE) {
     $requirements['dfp'] = array(
       'title' => $t('DFP'),
-      'value' => _dennis_requirements_case_link(23050) .
+      'description' => _dennis_requirements_case_link(23050) .
         $t('This module is part of distro and should be removed from site.make.'),
       'severity' => REQUIREMENT_ERROR,
     );
@@ -517,7 +519,7 @@ function _dennis_requirements_schema_7162($t, $modules_enabled, &$requirements) 
   if ($site_gruntfile && stripos($site_gruntfile, "grunt.loadNpmTasks('grunt-hashres')") === FALSE) {
     $requirements['hashres'] = array(
       'title' => $t('Gruntfile.js'),
-      'value' => _dennis_requirements_case_link(23055) .
+      'description' => _dennis_requirements_case_link(23055) .
         $t('To benefit from automatic cache busting on requirejs bundles, any Gruntfile optimising RequireJS files need to have a hashres task.'),
       'severity' => REQUIREMENT_ERROR,
     );
