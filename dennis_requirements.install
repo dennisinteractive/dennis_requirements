@@ -239,7 +239,7 @@ function dennis_requirements_requirements($phase) {
 
       // Find any block with string 'mosaic' in the info and check if it comes from Dennis Client.
       foreach (block_admin_display_prepare_blocks($theme) as $block) {
-        if (strpos($block['info'], 'mosaic') !== FALSE) {
+        if (stripos($block['info'], 'mosaic') !== FALSE) {
           if ($block['module'] !== 'dennis_client') {
             $block_names[] = $block['info'];
           }
