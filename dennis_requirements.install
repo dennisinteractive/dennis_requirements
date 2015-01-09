@@ -101,12 +101,14 @@ function _dennis_requirements_case_link($issue) {
 }
 
 /**
- * Distro 1.23.x to 1.25.x
+ * Distro 1.23.x to 1.25.x requirements.
  */
-function _dennis_requirements_schema_7146($t, $modules_enabled, &$requirements) {}
+function _dennis_requirements_schema_7146($t, $modules_enabled, &$requirements) {
+  // Nothing.
+}
 
 /**
- * Distro 1.26.x
+ * Distro 1.26.x requirements.
  */
 function _dennis_requirements_schema_7151($t, $modules_enabled, &$requirements) {
   // Enable dennis_disqus if site uses disqus.
@@ -123,17 +125,15 @@ function _dennis_requirements_schema_7151($t, $modules_enabled, &$requirements) 
 
   // #19931 Smart paging seo replaces the Page Break button.
   foreach ($wysiwyg_settings as $name => $item) {
-    if (isset($item->settings['buttons']['drupal']['smart_paging_seo']) &&
-      $item->settings['buttons']['drupal']['smart_paging_seo'] == TRUE
-    ) {}
-    elseif (isset($item->settings['buttons']['drupal']['smart_paging']) &&
-      $item->settings['buttons']['drupal']['smart_paging'] == TRUE
-    ) {
+    if (isset($item->settings['buttons']['drupal']['smart_paging_seo']) && $item->settings['buttons']['drupal']['smart_paging_seo'] == TRUE) {
+      // Nothing.
+    }
+    elseif (isset($item->settings['buttons']['drupal']['smart_paging']) && $item->settings['buttons']['drupal']['smart_paging'] == TRUE) {
       $requirements[$name . '_wysiwyg_sp'] = array(
         'title' => $t('Smart paging SEO on %name profile', array('%name' => $name)),
         'value' => $t('Distro 1.26.x'),
         'description' => _dennis_requirements_case_link('19931') .
-          $t('You need to enable Smart paging SEO button in the Wysiwyg profile.'),
+        $t('You need to enable Smart paging SEO button in the Wysiwyg profile.'),
         'severity' => REQUIREMENT_WARNING,
       );
     }
@@ -141,7 +141,7 @@ function _dennis_requirements_schema_7151($t, $modules_enabled, &$requirements) 
 }
 
 /**
- * Distro 1.27.x
+ * Distro 1.27.x requirements.
  */
 function _dennis_requirements_schema_7152($t, $modules_enabled, &$requirements) {
   // Get contents of site.make.
@@ -154,7 +154,8 @@ function _dennis_requirements_schema_7152($t, $modules_enabled, &$requirements) 
   // - Will be re-exported as part of a distro upgrade.
 
   // #20912 Images will need to be migrated using 'drush migration_filepath'.
-  // - We could check 'image-redirects.map' exists in the files directory, but this may not be present on all environments.
+  // - We could check 'image-redirects.map' exists in the files directory,
+  // but this may not be present on all environments.
 
   // #21009 Added new Formatter for the RSS thumbnails.
   foreach (module_implements('field_formatter_info') as $module_name) {
@@ -166,7 +167,7 @@ function _dennis_requirements_schema_7152($t, $modules_enabled, &$requirements) 
           'title' => $t('<em>dennis_core_rss_thumbnail</em> field formatter'),
           'value' => $t('Distro 1.27.x'),
           'description' => _dennis_requirements_case_link('21009') .
-            $t('<em>dennis_core_rss_thumbnail</em> field formatter should be removed from :hook.', array(':hook' => $hook . '()')),
+          $t('<em>dennis_core_rss_thumbnail</em> field formatter should be removed from :hook.', array(':hook' => $hook . '()')),
           'severity' => REQUIREMENT_WARNING,
         );
       }
@@ -182,13 +183,13 @@ function _dennis_requirements_schema_7152($t, $modules_enabled, &$requirements) 
         'title' => $t(':name metatag', array(':name' => $name)),
         'value' => $t('Distro 1.27.x'),
         'description' => _dennis_requirements_case_link('19829') .
-          $t(':name metatag should be set.', array(':name' => $name)),
+        $t(':name metatag should be set.', array(':name' => $name)),
         'severity' => REQUIREMENT_WARNING,
       );
     }
   }
 
-  // Google_plusone module (now provided by distro) should be removed from site.make.
+  // Google_plusone module (in distro) should be removed from site.make.
   if (stripos($site_make, '[google_plusone]') !== FALSE) {
     $requirements['google_plusone_make'] = array(
       'title' => $t('Google Plus One'),
@@ -211,7 +212,8 @@ function _dennis_requirements_schema_7152($t, $modules_enabled, &$requirements) 
     );
   }
   else {
-    // #20229 If a site has its own page.tpl.php implementation add schema.org organizational markup.
+    // #20229 If a site has its own page.tpl.php implementation
+    // add schema.org organizational markup.
     $file = file_scan_directory($theme_path, '/^page(--.+)?\.tpl\.php$/');
     if (!empty($file)) {
       $file = reset($file);
@@ -222,7 +224,7 @@ function _dennis_requirements_schema_7152($t, $modules_enabled, &$requirements) 
               'title' => $t('Organizational markup'),
               'value' => $t('Distro 1.27.x'),
               'description' => _dennis_requirements_case_link('20229') .
-                $t('This site has its own page.tpl.php but the implementation of organizational markup is missing.'),
+              $t('This site has its own page.tpl.php but the implementation of organizational markup is missing.'),
               'severity' => REQUIREMENT_WARNING,
             );
           }
@@ -233,11 +235,12 @@ function _dennis_requirements_schema_7152($t, $modules_enabled, &$requirements) 
 }
 
 /**
- * Distro 1.28.x
+ * Distro 1.28.x requirements.
  */
 function _dennis_requirements_schema_7156($t, $modules_enabled, &$requirements) {
   // #21451 Remove any backported {SITE}_client_views_query_alter() hooks.
-  // - This should be a manual task - we would need to check that the hook is making the same alteration.
+  // - This should be a manual task
+  // - we would need to check that the hook is making the same alteration.
 
   // Videos now play with YouTube's player as rendered file.
   $entity_info = entity_get_info();
@@ -301,7 +304,7 @@ function _dennis_requirements_schema_7156($t, $modules_enabled, &$requirements) 
 }
 
 /**
- * Distro 1.29.x
+ * Distro 1.29.x requirements.
  */
 function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) {
   // Get contents of Gruntfile.js.
@@ -316,7 +319,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
       'title' => $t('Require.js'),
       'value' => $t('Distro 1.29.x'),
       'description' => _dennis_requirements_case_link('W4777') .
-        $t('Sites should consider converting all custom JavaScript code using the AMD module format and Require.js.'),
+      $t('Sites should consider converting all custom JavaScript code using the AMD module format and Require.js.'),
       'severity' => REQUIREMENT_WARNING,
     );
   }
@@ -327,7 +330,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
       'title' => $t('Advagg'),
       'value' => $t('Distro 1.29.x'),
       'description' => _dennis_requirements_case_link('21634') .
-        $t('This module should be enabled to increase performance.'),
+      $t('This module should be enabled to increase performance.'),
       'severity' => REQUIREMENT_ERROR,
     );
   }
@@ -337,7 +340,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
       'title' => $t('AdvAgg Bundler'),
       'value' => $t('Distro 1.29.x'),
       'description' => _dennis_requirements_case_link('21634') .
-        $t('This module should be enabled to increase performance.'),
+      $t('This module should be enabled to increase performance.'),
       'severity' => REQUIREMENT_ERROR,
     );
   }
@@ -347,7 +350,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
       'title' => $t('AdvAgg Compress CSS'),
       'value' => $t('Distro 1.29.x'),
       'description' => _dennis_requirements_case_link('21634') .
-        $t('This module should be enabled to increase performance.'),
+      $t('This module should be enabled to increase performance.'),
       'severity' => REQUIREMENT_ERROR,
     );
   }
@@ -357,7 +360,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
       'title' => $t('AdvAgg Compress Javascript'),
       'value' => $t('Distro 1.29.x'),
       'description' => _dennis_requirements_case_link('21634') .
-        $t('This module should be enabled to increase performance.'),
+      $t('This module should be enabled to increase performance.'),
       'severity' => REQUIREMENT_ERROR,
     );
   }
@@ -367,7 +370,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
       'title' => $t('AdvAgg Modifier'),
       'value' => $t('Distro 1.29.x'),
       'description' => _dennis_requirements_case_link('21634') .
-        $t('This module should be enabled to increase performance.'),
+      $t('This module should be enabled to increase performance.'),
       'severity' => REQUIREMENT_ERROR,
     );
   }
@@ -377,7 +380,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
       'title' => $t('Aggregate cache'),
       'value' => $t('Distro 1.29.x'),
       'description' => _dennis_requirements_case_link('21634') .
-        $t('This module should be Disabled.'),
+      $t('This module should be Disabled.'),
       'severity' => REQUIREMENT_ERROR,
     );
   }
@@ -387,7 +390,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
       'title' => $t('CSS preprocessing'),
       'value' => $t('Distro 1.29.x'),
       'description' => _dennis_requirements_case_link('21634#BugEvent.156511') .
-        $t('CSS preprocessing has been disabled.'),
+      $t('CSS preprocessing has been disabled.'),
       'severity' => REQUIREMENT_WARNING,
     );
   }
@@ -397,7 +400,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
       'title' => $t('JS preprocessing'),
       'value' => $t('Distro 1.29.x'),
       'description' => _dennis_requirements_case_link('21634#BugEvent.156511') .
-        $t('JS preprocessing has been disabled.'),
+      $t('JS preprocessing has been disabled.'),
       'severity' => REQUIREMENT_WARNING,
     );
   }
@@ -409,7 +412,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
       'title' => $t('CSS and JS aggregation'),
       'value' => $t('Distro 1.29.x'),
       'description' => _dennis_requirements_case_link('21634#BugEvent.156511') .
-        $t('Sites should have CSS and JS aggregation turned on to increase performance.'),
+      $t('Sites should have CSS and JS aggregation turned on to increase performance.'),
       'severity' => REQUIREMENT_ERROR,
     );
   }
@@ -425,7 +428,7 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
       'title' => $t('CSS and JS aggregation'),
       'value' => $t('Distro 1.29.x'),
       'description' => _dennis_requirements_case_link('21634#BugEvent.156511') .
-        $t('Sites should have their CSS/JS stack sorted properly to make aggregation more efficient.'),
+      $t('Sites should have their CSS/JS stack sorted properly to make aggregation more efficient.'),
       'severity' => REQUIREMENT_ERROR,
     );
   }
@@ -441,7 +444,8 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
     $theme = $theme_key;
   }
 
-  // Find any block with string 'mosaic' in the info and check if it comes from Dennis Client.
+  // Find any block with string 'mosaic' in the info
+  // and check if it comes from Dennis Client.
   foreach (block_admin_display_prepare_blocks($theme) as $block) {
     if (stripos($block['info'], 'mosaic') !== FALSE) {
       if ($block['module'] !== 'dennis_client') {
@@ -454,14 +458,14 @@ function _dennis_requirements_schema_7160($t, $modules_enabled, &$requirements) 
       'title' => $t('Dennis Client Mosaic'),
       'value' => $t('Distro 1.29.x'),
       'description' => _dennis_requirements_case_link('22614') .
-        $t('These blocks should be replaced by Dennis Client Mosaic blocks: ' . implode(', ', $block_names)),
+      $t('These blocks should be replaced by Dennis Client Mosaic blocks: ' . implode(', ', $block_names)),
       'severity' => REQUIREMENT_WARNING,
     );
   }
 }
 
 /**
- * Distro 1.30.x
+ * Distro 1.30.x requirements.
  */
 function _dennis_requirements_schema_7161($t, $modules_enabled, &$requirements) {
   // #22527 Feeds - Covered by BDD @distro @seo @api @22527
@@ -472,7 +476,7 @@ function _dennis_requirements_schema_7161($t, $modules_enabled, &$requirements) 
       'title' => $t('Dennis Gallery'),
       'value' => $t('Distro 1.30.x'),
       'description' => _dennis_requirements_case_link(22907) .
-        $t('Advanced Gallery is available. Use dennis_gallery_adv_migrate_from_gallery() to migrate and then disable Dennis Gallery on a separate release.'),
+      $t('Advanced Gallery is available. Use dennis_gallery_adv_migrate_from_gallery() to migrate and then disable Dennis Gallery on a separate release.'),
       'severity' => REQUIREMENT_WARNING,
     );
   }
@@ -486,7 +490,7 @@ function _dennis_requirements_schema_7161($t, $modules_enabled, &$requirements) 
           'title' => $t('DFP'),
           'value' => $t('Distro 1.30.x'),
           'description' => _dennis_requirements_case_link('W4808') .
-            $t('DFP Out of page no longer renders as a block. Please edit the DFP Contexts and add a Reaction for DFP Out of Page.'),
+          $t('DFP Out of page no longer renders as a block. Please edit the DFP Contexts and add a Reaction for DFP Out of Page.'),
           'severity' => REQUIREMENT_ERROR,
         );
       }
@@ -495,7 +499,7 @@ function _dennis_requirements_schema_7161($t, $modules_enabled, &$requirements) 
 }
 
 /**
- * Distro 1.31.x
+ * Distro 1.31.x requirements.
  */
 function _dennis_requirements_schema_7162($t, $modules_enabled, &$requirements) {
   // Get contents of site.make.
@@ -510,12 +514,13 @@ function _dennis_requirements_schema_7162($t, $modules_enabled, &$requirements) 
       'title' => $t('Dennis Social'),
       'value' => $t('Distro 1.31.x'),
       'description' => _dennis_requirements_case_link(22799) .
-        $t('Addthis module needs to be disabled. Sharerich should be used instead.'),
+      $t('Addthis module needs to be disabled. Sharerich should be used instead.'),
       'severity' => REQUIREMENT_ERROR,
     );
   }
 
-  // Case 22925: Google Adwords Remarketing is added to Distro and should be removed from site.make.
+  // Case 22925: Google Adwords Remarketing is added to Distro
+  // and should be removed from site.make.
   if (stripos($site_make, '[google_adwords_remarketing]') !== FALSE ||
     stripos($site_make, '[google_remarketing_tag]') !== FALSE
   ) {
@@ -523,7 +528,7 @@ function _dennis_requirements_schema_7162($t, $modules_enabled, &$requirements) 
       'title' => $t('Google Remarketing Tag'),
       'value' => $t('Distro 1.31.x'),
       'description' => _dennis_requirements_case_link(22925) .
-        $t('This module is part of distro and should be removed from site.make.'),
+      $t('This module is part of distro and should be removed from site.make.'),
       'severity' => REQUIREMENT_ERROR,
     );
   }
@@ -534,7 +539,7 @@ function _dennis_requirements_schema_7162($t, $modules_enabled, &$requirements) 
       'title' => $t('DFP'),
       'value' => $t('Distro 1.31.x'),
       'description' => _dennis_requirements_case_link(23050) .
-        $t('This module is part of distro and should be removed from site.make.'),
+      $t('This module is part of distro and should be removed from site.make.'),
       'severity' => REQUIREMENT_ERROR,
     );
   }
@@ -551,7 +556,7 @@ function _dennis_requirements_schema_7162($t, $modules_enabled, &$requirements) 
       'title' => $t('Gruntfile.js'),
       'value' => $t('Distro 1.31.x'),
       'description' => _dennis_requirements_case_link(23055) .
-        $t('To benefit from automatic cache busting on requirejs bundles, any Gruntfile optimising RequireJS files need to have a hashres task.'),
+      $t('To benefit from automatic cache busting on requirejs bundles, any Gruntfile optimising RequireJS files need to have a hashres task.'),
       'severity' => REQUIREMENT_ERROR,
     );
   }
