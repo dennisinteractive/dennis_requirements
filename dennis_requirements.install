@@ -57,6 +57,9 @@ function dennis_requirements_requirements($phase) {
 
   }
 
+  // Allow sites to have the final say.
+  drupal_alter('dennis_requirements', $requirements, $phase, $distro_schema_version);
+  
   // Group and sort requirements.
   if (count($requirements) > 0) {
     // Add heading for requirements.
