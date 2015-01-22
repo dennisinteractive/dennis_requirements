@@ -522,16 +522,33 @@ function _dennis_requirements_schema_7162($t, $modules_enabled, &$requirements) 
     );
   }
 
-  // Case 22925: Google Adwords Remarketing is added to Distro
-  // and should be removed from site.make.
-  if (stripos($site_make, '[google_adwords_remarketing]') !== FALSE ||
-    stripos($site_make, '[google_remarketing_tag]') !== FALSE
-  ) {
+  // Case 22925: google_adwords_remarketing is replaced with google_remarketing_tag.
+  if (isset($modules_enabled['google_adwords_remarketing'])) {
     $requirements['google_adwords_remarketing'] = array(
       'title' => $t('Google Remarketing Tag'),
       'value' => $t('Distro 1.31.x'),
       'description' => _dennis_requirements_case_link(22925) .
-      $t('This module is part of distro and should be removed from site.make.'),
+      $t('google_adwords_remarketing module should be replaced with google_remarketing_tag.'),
+      'severity' => REQUIREMENT_ERROR,
+    );
+  }
+  // Check for google_remarketing_tag in site.make
+  if (stripos($site_make, '[google_remarketing_tag]') !== FALSE) {
+    $requirements['google_remarketing_tag'] = array(
+      'title' => $t('Google Remarketing Tag'),
+      'value' => $t('Distro 1.31.x'),
+      'description' => _dennis_requirements_case_link(22925) .
+      $t('google_remarketing_tag module should be removed from site.make. It is alreary provided by Distro.'),
+      'severity' => REQUIREMENT_ERROR,
+    );
+  }
+  // Check for google_adwords_remarketing in site.make
+  if (stripos($site_make, '[google_adwords_remarketing]') !== FALSE) {
+    $requirements['google_adwords_remarketing_2'] = array(
+      'title' => $t('Google Adwords Remarketing'),
+      'value' => $t('Distro 1.31.x'),
+      'description' => _dennis_requirements_case_link(22925) .
+      $t('google_adwords_remarketing module should be removed from site.make. It has been replaced by google_remarketing_tag in Distro.'),
       'severity' => REQUIREMENT_ERROR,
     );
   }
