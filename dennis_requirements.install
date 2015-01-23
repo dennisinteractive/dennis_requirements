@@ -487,7 +487,8 @@ function _dennis_requirements_schema_7161($t, $modules_enabled, &$requirements) 
   // #22633 DFP Out of page is no longer a block, it is now a context reaction.
   $context_reactions = context_reactions();
   if (isset($context_reactions['dfp_outofpage'])) {
-    foreach (context_enabled_contexts() as $context) {
+    $contexts = context_enabled_contexts();
+    foreach ($contexts as $context) {
       if (isset($context->reactions['block']['blocks']['dfp-out_of_page'])) {
         $requirements['dfp'] = array(
           'title' => $t('DFP'),
