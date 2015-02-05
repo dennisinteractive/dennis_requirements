@@ -593,7 +593,6 @@ function _dennis_requirements_schema_7162($t, $modules_enabled, &$requirements) 
 function _dennis_requirements_schema_7164($t, $modules_enabled, &$requirements) {
   // Get contents of current theme's template.php.
   $templatephp = '';
-  $sitename =
   $templatephp_path = drupal_get_path('theme', variable_get('theme_default', 'garland')) . '/template.php';
   if (file_exists($templatephp_path)) {
     $templatephp = file_get_contents($templatephp_path);
