@@ -55,11 +55,15 @@ function dennis_requirements_requirements($phase) {
       _dennis_requirements_schema_7162($t, $modules_enabled, $requirements);
     }
 
+    // Distro 1.32.x
+    if ($distro_schema_version >= 7164) {
+      _dennis_requirements_schema_7164($t, $modules_enabled, $requirements);
+    }
   }
 
   // Allow sites to have the final say.
   drupal_alter('dennis_requirements', $requirements, $phase, $distro_schema_version);
-  
+
   // Group and sort requirements.
   if (count($requirements) > 0) {
     // Add heading for requirements.
@@ -579,6 +583,30 @@ function _dennis_requirements_schema_7162($t, $modules_enabled, &$requirements) 
       'description' => _dennis_requirements_case_link(23055) .
       $t('To benefit from automatic cache busting on requirejs bundles, any Gruntfile optimising RequireJS files need to have a hashres task.'),
       'severity' => REQUIREMENT_ERROR,
+    );
+  }
+}
+
+/**
+ * Distro 1.32.x requirements.
+ */
+function _dennis_requirements_schema_7164($t, $modules_enabled, &$requirements) {
+  // Get contents of current theme's template.php.
+  $templatephp = '';
+  $sitename =
+  $templatephp_path = drupal_get_path('theme', variable_get('theme_default', 'garland')) . '/template.php';
+  if (file_exists($templatephp_path)) {
+    $templatephp = file_get_contents($templatephp_path);
+  }
+
+  // Case 23277 Primary Media fieldset
+  if ($templatephp && stripos($templatephp, '_primary_media') !== FALSE) {
+    $requirements['primary_media'] = array(
+      'title' => $t('Primary Media'),
+      'value' => $t('Distro 1.32.x'),
+      'description' => _dennis_requirements_case_link(W4818) .
+      $t('Dennis Primary Media fieldset is available to implement in view mode settings. Consider delegating primary media functionality from preprocess functions to view mode configuration.'),
+      'severity' => REQUIREMENT_WARNING,
     );
   }
 }
