@@ -610,22 +610,22 @@ function _dennis_requirements_schema_7164($t, $modules_enabled, &$requirements) 
   }
 
   // Case 23455: Port GA Universal to Distro.
-  $ga_deprecated_hooks = array('googleanalytics_custom_url', 'googleanalytics_push_commands');
-  $ga_deprecated_hooks_list = array();
+  $ga_deleted_hooks = array('googleanalytics_custom_url', 'googleanalytics_push_commands');
+  $ga_deleted_hooks_list = array();
 
-  foreach ($ga_deprecated_hooks as $hook) {
+  foreach ($ga_deleted_hooks as $hook) {
     if (module_invoke_all($hook)) {
-      $ga_deprecated_hooks_list[] = 'hook_' . $hook;
+      $ga_deleted_hooks_list[] = 'hook_' . $hook;
     }
   }
 
-  if (!empty($ga_deprecated_hooks_list)) {
+  if (!empty($ga_deleted_hooks_list)) {
     $requirements['google_analytics'] = array(
       'title' => $t('Google Analytics'),
       'value' => $t('Distro 1.32.x'),
       'description' => _dennis_requirements_case_link(23455) .
-        $t('These hooks are deprecated: %hooks. They have been replaced by Universal GA support to Dimensions.', array(
-            '%hooks' => implode(', ', $ga_deprecated_hooks_list))
+        $t('These hooks no longer exist: %hooks. They have been replaced by Universal GA support to Dimensions.', array(
+            '%hooks' => implode(', ', $ga_deleted_hooks_list))
         ),
       'severity' => REQUIREMENT_ERROR,
     );
