@@ -608,4 +608,27 @@ function _dennis_requirements_schema_7164($t, $modules_enabled, &$requirements) 
       'severity' => REQUIREMENT_WARNING,
     );
   }
+
+  // Case 23455: Port GA Universal to Distro.
+  $ga_hooks_to_delete = array('googleanalytics_custom_url', 'googleanalytics_push_commands');
+  $ga_hooks_to_delete_detected = array();
+
+  foreach ($ga_hooks_to_delete as $hook) {
+    $ga_hook_deleted = module_invoke_all($hook);
+    if (!empty($ga_hook_deleted)) {
+      $ga_hooks_to_delete_detected['hook_' . $hook] = $ga_hook_deleted;
+    }
+  }
+
+  if (!empty($ga_hooks_to_delete_detected)) {
+    $requirements['google_analytics'] = array(
+      'title' => $t('Google Analytics'),
+      'value' => $t('Distro 1.32.x'),
+      'description' => _dennis_requirements_case_link(23455) .
+      $t('Get rid and reimplement any implementation of %hooks as these are not available anymore.', array(
+        '%hooks' => implode(', ', array_keys($ga_hooks_to_delete_detected)))
+      ),
+      'severity' => REQUIREMENT_ERROR,
+    );
+  }
 }
