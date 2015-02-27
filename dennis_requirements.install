@@ -630,4 +630,15 @@ function _dennis_requirements_schema_7164($t, $modules_enabled, &$requirements) 
       'severity' => REQUIREMENT_ERROR,
     );
   }
+  
+  // Case 23336: Patched pathcache to work.
+  if (!isset($modules_enabled['pathcache'])) {
+    $requirements['dennis_social'] = array(
+      'title' => $t('Pathcache'),
+      'value' => $t('Distro 1.32.x'),
+      'description' => _dennis_requirements_case_link(23336) .
+      $t('Pathcache module should be enabled.'),
+      'severity' => REQUIREMENT_WARNING,
+    );
+  }
 }
